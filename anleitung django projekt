@@ -1,6 +1,6 @@
 Anleitung
 als erstes sollte man in das Verzeichnis wechseln wo man die Virtualeumgebung haben möchte.
-folgenden Befehl führt man in dem Root Verzeichnis von dem Git Repository aus:
+folgenden Befehl führt man in dem env Verzeichnis von dem Git Repository aus:
 	virtualenv --python=python3 .
 Danach kann man die Abhängigkeiten mit dem folgenden Befehl installieren:
 	../bin/pip install -r {/home/praktikant/Django-Preisverlauf/mysite/pip_freeze}eigener Pfad
@@ -11,7 +11,7 @@ Nun kann man gegebenenfalls die folgende Datei editieren um Einstellungen zu än
 Die Settings Datei ist:
 	./mysite/mysite/settings.py
 Nun kann man die Datenbank mit folgenden Befehl anlegen:
-	
+	python manage.py makemigrations
 danach führt man den Befehl aus:
 	../bin/python manage.py runserver
 jetzt kann man sich das Projekt im Browser angucken:
