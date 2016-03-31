@@ -1,0 +1,3 @@
+Anleitung
+
+Man muss die mysite Datei in den eigenen env Ordner kopieren und vorher noch django-polls und django installieren

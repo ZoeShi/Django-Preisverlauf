@@ -1,0 +1,22 @@
+<form action="/polls/dateiimport"  method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Submit" />
+</form>
+
+{% if latest_Product_list %}
+    <ol>
+    {% for Product in latest_Product_list %}
+	<li><a href="{{ Product.get_absolute_url }}">{{ Product.Product }}</a></li>
+    {% endfor %}
+    </ol>
+{% else %}
+    <p>Keine Produkte vorhanden.</p>
+{% endif %}
+
+{% load staticfiles %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}" />
+
+
+

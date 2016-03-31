@@ -1,0 +1,34 @@
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/dygraph/1.1.1/dygraph-combined.js"></script>
+
+<h1>{{ Product.Product }}</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="{{ Product.get_absolute_url }}" method="post">
+{% csrf_token %}
+{{ form }}
+<input type="submit" value="Speichern" />
+</form>
+
+<div id="graphdiv"></div>
+
+
+<script type="text/javascript">
+  g4 = new Dygraph(
+    document.getElementById("graphdiv"),
+    "csv",
+    {
+      title: 'History',
+      errorBars: true,
+      legend: 'always',
+      ylabel: 'Preise',
+      xlabel: 'Datensätze',
+      
+
+
+    }
+  );
+</script>
+</div>
+
