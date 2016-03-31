@@ -1,3 +1,21 @@
 Anleitung
+als erstes sollte man in das Verzeichnis wechseln wo man die Virtualeumgebung haben möchte.
+folgenden Befehl führt man in dem Root Verzeichnis von dem Git Repository aus:
+	virtualenv --python=python3 .
+Danach kann man die Abhängigkeiten mit dem folgenden Befehl installieren:
+	../bin/pip install -r {/home/praktikant/Django-Preisverlauf/mysite/pip_freeze}eigener Pfad
 
-Man muss die mysite Datei in den eigenen env Ordner kopieren und vorher noch django-polls und django installieren
+danach kann man den mysite Ordner in die neue env Umgebung kopieren und die manage.py kann man ebenfalls in den env Ordner kopieren.
+Nun kann man gegebenenfalls die folgende Datei editieren um Einstellungen zu ändern. Um Details zu bekommen, was man alles einstellen kann bitte auf dieser Webseite nachlesen:
+	https://docs.djangoproject.com/en/1.9/ref/settings/
+Die Settings Datei ist:
+	./mysite/mysite/settings.py
+Nun kann man die Datenbank mit folgenden Befehl anlegen:
+	
+danach führt man den Befehl aus:
+	../bin/python manage.py runserver
+jetzt kann man sich das Projekt im Browser angucken:
+	http://127.0.0.1:8000/polls
+
+
+	
