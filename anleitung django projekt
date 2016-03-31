@@ -11,9 +11,9 @@ danach kann man den mysite Ordner in die neue env Umgebung kopieren und die mana
 Nun kann man gegebenenfalls die folgende Datei editieren um Einstellungen zu ändern. Um Details zu bekommen, was man alles einstellen kann bitte auf dieser Webseite nachlesen:
 	https://docs.djangoproject.com/en/1.9/ref/settings/
 Die Settings Datei ist:
-	./mysite/mysite/settings.py
+	./mysite/settings.py
 Nun kann man die Datenbank mit folgenden Befehl anlegen:
-	python manage.py makemigrations
+	python manage.py migrate
 danach führt man den Befehl aus:
 	./bin/python manage.py runserver
 jetzt kann man sich das Projekt im Browser angucken:
