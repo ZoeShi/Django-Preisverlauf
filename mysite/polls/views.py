@@ -67,7 +67,7 @@ def datei(datei):
         }
 
         x.append(o)
-        x.sort()
+        
 
     return(x)
 
