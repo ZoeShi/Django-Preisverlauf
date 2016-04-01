@@ -6,7 +6,7 @@ from django.utils import timezone
 
 from .forms import UploadFileForm, Product_idForm
 from decimal import *
-from polls.models import Product, Product_id
+from polls.models import *
 from datetime import datetime
 
 import re
@@ -59,6 +59,7 @@ def datei(datei):
         Alter_Preis=l[0][1].replace(",", ".")
         Neuer_Preis=l[0][2].replace(",", ".")
 
+
         o = {
        	    "Product": Product,
             "Alter Preis": Decimal(Alter_Preis),
@@ -66,12 +67,13 @@ def datei(datei):
         }
 
         x.append(o)
+        x.sort()
 
     return(x)
 
 class IndexView(generic.View):
     def get_queryset(self):
-        return Product_id.objects.all()
+        return Product_id.objects.all().order_by('Product')
 
     def get(self,request):
         latest_Product_list = self.get_queryset()
@@ -93,7 +95,6 @@ class ProductView(generic.View):
     def get(self, request, pk):
         p = Product_id.objects.get(pk=pk)
         form = Product_idForm(instance=p )
-
 
 
         context = {
@@ -118,6 +119,19 @@ class ProductCSVView(generic.View):
             writer.writerow([count + 1, str(prc.Neuer_Preis)])
             count += 2
         return response
+
+class  search(generic.View):
+
+    def get(self,request):
+        if request.method == 'GET':
+            search_query = request.GET.get('search_box', None)
+            gesuchtesproduct = Product_id.objects.filter(Product__contains=search_query)
+            form = UploadFileForm()
+            context = {
+                'latest_Product_list': gesuchtesproduct,
+                'form': form
+            }
+            return render(request, 'polls/index.html', context)
 
 
 

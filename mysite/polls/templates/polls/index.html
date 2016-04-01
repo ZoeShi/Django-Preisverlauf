@@ -3,18 +3,50 @@
     {{ form }}
     <input type="submit" value="Submit" />
 </form>
+    <h1>Producte</h1>
+<style>
+      table, td, th { border: 1px solid black; }
+</style>
+<form type="get" action="./search" style="margin: 0">
+    <input  id="search_box" type="text" name="search_box"  placeholder="Search..." >
+    <button id="search_submit" type="submit" >Submit</button>
+</form>
 
 {% if latest_Product_list %}
-    <ol>
-    {% for Product in latest_Product_list %}
-	<li><a href="{{ Product.get_absolute_url }}">{{ Product.Product }}</a></li>
-    {% endfor %}
-    </ol>
+    <table>
+      <tr>
+        <th>Product</th>
+        <th>Bester Preis</th>
+        <th>Aktueller Preis</th>
+      </tr>
+    <tr>
+
+        {%for Product in latest_Product_list%}
+        <tr>
+            <td>
+                <a href="{{ Product.get_absolute_url }}">{{ Product.Product }}
+                </a>
+            </td>
+            <td>
+                <a href="{{ Product.get_absolute_url }}">{{ Product.GuenstigsterPreis }}
+                </a>
+            </td>
+
+            <td>
+                <a href="{{ Product.get_absolute_url }}">{{ Product.AktuellerPreis }}
+                </a>
+            </td>
+        </tr>
+        {%endfor%}
+
+    </tr>
+    </table>
 {% else %}
     <p>Keine Produkte vorhanden.</p>
 {% endif %}
 
 {% load staticfiles %}
+
 
 <link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}" />
 

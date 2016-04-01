@@ -27,7 +27,7 @@ class Product(models.Model):
 class Product_id(models.Model):
     Product = models.CharField(max_length=200)
     GuenstigsterPreis = models.DecimalField(decimal_places=2,max_digits=10,default=0.0)
-
+    AktuellerPreis = models.DecimalField(decimal_places=2,max_digits=10,default=0.0)
     def get_absolute_url(self):
         from polls.urls import app_name
         return reverse('%s:product'%(app_name), args=[self.pk])
@@ -43,7 +43,9 @@ class Product_id(models.Model):
         self.GuenstigsterPreis = min(f)
         self.save()
 
-
+        AktuellesProdukt = Product.objects.filter(Product_id=self).extra(order_by=['-datumzeit']).first()
+        self.AktuellerPreis = AktuellesProdukt.Neuer_Preis
+        self.save()
 
 
 
