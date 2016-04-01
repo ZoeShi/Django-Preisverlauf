@@ -67,7 +67,7 @@ def datei(datei):
         }
 
         x.append(o)
-        
+
 
     return(x)
 
@@ -114,10 +114,53 @@ class ProductCSVView(generic.View):
         all_product_prices = Product.objects.filter(Product=p).extra(order_by=['datumzeit'])
 
         count = 0
+        checker_neu = None
+        checker_alt = None
+
         for prc in all_product_prices:
-            writer.writerow([count, str(prc.Alter_Preis)])
-            writer.writerow([count + 1, str(prc.Neuer_Preis)])
-            count += 2
+            if checker_neu is not None and checker_alt is not None:
+                if prc.Alter_Preis == prc.Neuer_Preis:
+                    writer.writerow([count, str(prc.Alter_Preis)])
+                    continue
+                elif checker_neu == prc.Alter_Preis:
+                    checker_alt = prc.Alter_Preis
+                    checker_neu = prc.Neuer_Preis
+
+                    writer.writerow([count, str(prc.Alter_Preis)])
+                    count += 1
+                    writer.writerow([count, str(prc.Neuer_Preis)])
+                elif checker_neu == prc.Neuer_Preis:
+                    checker_alt = prc.Alter_Preis
+                    checker_neu = prc.Neuer_Preis
+
+                    writer.writerow([count, str(prc.Alter_Preis)])
+                    count += 1
+                    writer.writerow([count, str(prc.Neuer_Preis)])
+                elif checker_alt == prc.Neuer_Preis:
+                    writer.writerow([count, str(prc.Neuer_Preis)])
+                elif checker_neu != prc.Alter_Preis:
+                    writer.writerow([count, str(prc.Neuer_Preis)])
+                    writer.writerow([count, str(checker_neu)])
+                elif prc.Alter_Preis != prc.Neuer_Preis:
+                    writer.writerow([count, str(prc.Neuer_Preis)])
+                    writer.writerow([count, str(prc.Alter.preis)])
+                elif checker_neu != prc.Neuer_Preis:
+                    writer.writerow([count, str(prc.Neuer_Preis)])
+                    writer.writerow([count, str(checker_neu)])
+                elif checker_alt != checker_neu:
+                    writer.writerow([count, str(checker_alt)])
+                    writer.writerow([count, str(checker_neu)])
+                elif checker_alt != prc.Neuer_Preis:
+                    writer.writerow([count, str(checker_alt)])
+                    writer.writerow([count, str(prc.Neuer_Preis)])
+
+            else:
+                checker_alt = prc.Alter_Preis
+                checker_neu = prc.Neuer_Preis
+
+                writer.writerow([count, str(prc.Alter_Preis)])
+                count += 1
+                writer.writerow([count, str(prc.Neuer_Preis)])
         return response
 
 class  search(generic.View):
