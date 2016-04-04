@@ -86,19 +86,23 @@ class IndexView(generic.View):
 
 
 class ProductView(generic.View):
-    def get_queryset(self):
-        return Product_id.objects.all().order_by('Product')
+    def get_queryset(self,pk):
+        return Product_id.objects.filter(pk=pk)
     model = Product
     template_name = 'polls/product.html'
 
     def get(self, request, pk):
-        latest_Product_list = self.get_queryset()
         p = Product_id.objects.get(pk=pk)
+        s = Product.objects.filter(Product=pk)
+
+        latest_Product_list = self.get_queryset(pk=pk)
+
         form = Product_idForm(instance=p)
 
 
         context = {
             'latest_Product_list': latest_Product_list,
+            's': s,
             'form': form,
         }
         return render(request, 'polls/product.html', context)

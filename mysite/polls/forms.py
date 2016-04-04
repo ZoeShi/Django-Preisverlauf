@@ -8,3 +8,5 @@ class Product_idForm(forms.ModelForm):
     class Meta:
         model = Product_id
         fields = ['Product', 'GuenstigsterPreis']
+
+
