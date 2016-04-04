@@ -20,7 +20,6 @@ class UploadView(generic.View):
     def post(self, request):
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
-            #datei(request.FILES['file'])
             for i in datei(request.FILES['file']):
                 existing = Product_id.objects.filter(Product=i["Product"])
                 if len(existing) == 0:
@@ -148,23 +147,7 @@ class ProductCSVView(generic.View):
                     writer.writerow([count, str(prc.Neuer_Preis)])
                     count += 1
                     writer.writerow([count, str(prc.Neuer_Preis)])
-                elif checker_alt == prc.Neuer_Preis:
-                    writer.writerow([count, str(prc.Neuer_Preis)])
-                elif checker_neu != prc.Alter_Preis:
-                    writer.writerow([count, str(prc.Neuer_Preis)])
-                    writer.writerow([count, str(checker_neu)])
-                elif prc.Alter_Preis != prc.Neuer_Preis:
-                    writer.writerow([count, str(prc.Neuer_Preis)])
-                    writer.writerow([count, str(prc.Alter.preis)])
-                elif checker_neu != prc.Neuer_Preis:
-                    writer.writerow([count, str(prc.Neuer_Preis)])
-                    writer.writerow([count, str(checker_neu)])
-                elif checker_alt != checker_neu:
-                    writer.writerow([count, str(checker_alt)])
-                    writer.writerow([count, str(checker_neu)])
-                elif checker_alt != prc.Neuer_Preis:
-                    writer.writerow([count, str(checker_alt)])
-                    writer.writerow([count, str(prc.Neuer_Preis)])
+
 
             else:
                 checker_alt = prc.Alter_Preis
