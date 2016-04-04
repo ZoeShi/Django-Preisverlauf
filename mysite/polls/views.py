@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.views import generic
 from django.utils import timezone
-
+from django.shortcuts import render_to_response
 from .forms import UploadFileForm, Product_idForm
 from decimal import *
 from polls.models import *
@@ -41,7 +41,7 @@ class UploadView(generic.View):
         return render(request, 'polls/upload.html', {'form': form})
 
 def datei(datei):
-    #datei = open('Amazon_Pricing.txt')
+
 
     zeilen = []
     for line in datei:
@@ -49,11 +49,10 @@ def datei(datei):
             zeilen.append(str(line, 'latin-1').strip())
     datei.close()
 
-    y = []
+
     x = []
     for i in zeilen:
         l = re.findall(r'(.*) hat sich von EUR ([0-9]+\,[0-9]+) auf EUR ([0-9]+\,[0-9]+) .*', i)
-
 
         Product=l[0][0]
         Alter_Preis=l[0][1].replace(",", ".")
@@ -77,7 +76,7 @@ class IndexView(generic.View):
 
     def get(self,request):
         latest_Product_list = self.get_queryset()
-        form = UploadFileForm()
+        form = Product_idForm()
         context = {
             'latest_Product_list': latest_Product_list,
             'form': form
@@ -86,24 +85,30 @@ class IndexView(generic.View):
         return render(request, 'polls/index.html', context)
 
 
-
-
 class ProductView(generic.View):
+    def get_queryset(self):
+        return Product_id.objects.all().order_by('Product')
     model = Product
     template_name = 'polls/product.html'
 
     def get(self, request, pk):
+        latest_Product_list = self.get_queryset()
         p = Product_id.objects.get(pk=pk)
-        form = Product_idForm(instance=p )
+        form = Product_idForm(instance=p)
 
 
         context = {
+            'latest_Product_list': latest_Product_list,
             'form': form,
         }
         return render(request, 'polls/product.html', context)
 
+
+
+
 class ProductCSVView(generic.View):
     def get(self, request, pk):
+
         p = Product_id.objects.get(pk=pk)
 
         response = HttpResponse(content_type='text/csv')
@@ -116,6 +121,9 @@ class ProductCSVView(generic.View):
         count = 0
         checker_neu = None
         checker_alt = None
+
+
+
 
         for prc in all_product_prices:
             if checker_neu is not None and checker_alt is not None:
@@ -133,7 +141,7 @@ class ProductCSVView(generic.View):
                     checker_alt = prc.Alter_Preis
                     checker_neu = prc.Neuer_Preis
 
-                    writer.writerow([count, str(prc.Alter_Preis)])
+                    writer.writerow([count, str(prc.Neuer_Preis)])
                     count += 1
                     writer.writerow([count, str(prc.Neuer_Preis)])
                 elif checker_alt == prc.Neuer_Preis:
@@ -161,20 +169,21 @@ class ProductCSVView(generic.View):
                 writer.writerow([count, str(prc.Alter_Preis)])
                 count += 1
                 writer.writerow([count, str(prc.Neuer_Preis)])
+
         return response
 
-class  search(generic.View):
+
+class search(generic.View):
 
     def get(self,request):
-        if request.method == 'GET':
-            search_query = request.GET.get('search_box', None)
-            gesuchtesproduct = Product_id.objects.filter(Product__contains=search_query)
-            form = UploadFileForm()
-            context = {
-                'latest_Product_list': gesuchtesproduct,
-                'form': form
-            }
-            return render(request, 'polls/index.html', context)
+        search_query = request.GET.get('search_box', None)
+        gesuchtesproduct = Product_id.objects.filter(Product__contains=search_query)
+        form = UploadFileForm()
+        context = {
+            'latest_Product_list': gesuchtesproduct,
+            'form': form
+        }
+        return render(request, 'polls/index.html', context)
 
 
 
