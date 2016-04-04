@@ -12,6 +12,7 @@ from datetime import datetime
 import re
 import csv
 
+
 class UploadView(generic.View):
     def get(self, request):
         form = UploadFileForm()
@@ -39,8 +40,8 @@ class UploadView(generic.View):
             return render(request, 'polls/succesurl.html')
         return render(request, 'polls/upload.html', {'form': form})
 
-def datei(datei):
 
+def datei(datei):
 
     zeilen = []
     for line in datei:
@@ -48,32 +49,30 @@ def datei(datei):
             zeilen.append(str(line, 'latin-1').strip())
     datei.close()
 
-
     x = []
     for i in zeilen:
         l = re.findall(r'(.*) hat sich von EUR ([0-9]+\,[0-9]+) auf EUR ([0-9]+\,[0-9]+) .*', i)
 
-        Product=l[0][0]
-        Alter_Preis=l[0][1].replace(",", ".")
-        Neuer_Preis=l[0][2].replace(",", ".")
-
+        Product = l[0][0]
+        Alter_Preis = l[0][1].replace(",", ".")
+        Neuer_Preis = l[0][2].replace(",", ".")
 
         o = {
-       	    "Product": Product,
+            "Product": Product,
             "Alter Preis": Decimal(Alter_Preis),
             "Neuer Preis": Decimal(Neuer_Preis)
         }
 
         x.append(o)
 
-
     return(x)
+
 
 class IndexView(generic.View):
     def get_queryset(self):
         return Product_id.objects.all().order_by('Product')
 
-    def get(self,request):
+    def get(self, request):
         latest_Product_list = self.get_queryset()
         form = Product_idForm()
         context = {
@@ -85,7 +84,7 @@ class IndexView(generic.View):
 
 
 class ProductView(generic.View):
-    def get_queryset(self,pk):
+    def get_queryset(self, pk):
         return Product_id.objects.filter(pk=pk)
     model = Product
     template_name = 'polls/product.html'
@@ -98,15 +97,12 @@ class ProductView(generic.View):
 
         form = Product_idForm(instance=p)
 
-
         context = {
             'latest_Product_list': latest_Product_list,
             's': s,
             'form': form,
         }
         return render(request, 'polls/product.html', context)
-
-
 
 
 class ProductCSVView(generic.View):
@@ -124,9 +120,6 @@ class ProductCSVView(generic.View):
         count = 0
         checker_neu = None
         checker_alt = None
-
-
-
 
         for prc in all_product_prices:
             if checker_neu is not None and checker_alt is not None:
@@ -148,11 +141,9 @@ class ProductCSVView(generic.View):
                     count += 1
                     writer.writerow([count, str(prc.Neuer_Preis)])
 
-
             else:
                 checker_alt = prc.Alter_Preis
                 checker_neu = prc.Neuer_Preis
-
                 writer.writerow([count, str(prc.Alter_Preis)])
                 count += 1
                 writer.writerow([count, str(prc.Neuer_Preis)])
@@ -162,7 +153,7 @@ class ProductCSVView(generic.View):
 
 class search(generic.View):
 
-    def get(self,request):
+    def get(self, request):
         search_query = request.GET.get('search_box', None)
         gesuchtesproduct = Product_id.objects.filter(Product__contains=search_query)
         form = UploadFileForm()
@@ -171,6 +162,3 @@ class search(generic.View):
             'form': form
         }
         return render(request, 'polls/index.html', context)
-
-
-

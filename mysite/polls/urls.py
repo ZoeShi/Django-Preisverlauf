@@ -11,6 +11,4 @@ urlpatterns = [
     url(r'^(?P<pk>[0-9]+)/product/csv$', views.ProductCSVView.as_view(), name='csv'),
     url(r'dateiimport$', views.UploadView.as_view(), name='upload'),
     url(r'^search/$', views.search.as_view(), name='search')
-
 ]
-
