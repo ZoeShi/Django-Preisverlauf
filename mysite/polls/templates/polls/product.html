@@ -6,9 +6,11 @@
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
 <form action="{{ Product.get_absolute_url }}" method="post">
-{% csrf_token %}
-{{ form }}
-<input type="submit" value="Speichern" />
+    {% csrf_token %}
+    {{ form }}
+
+
+
 </form>
 
 <div id="graphdiv"></div>
@@ -25,11 +27,47 @@
       ylabel: 'Preise',
       xlabel: 'Datensätze',
 
-
-
     }
   );
+
+
 </script>
+<style>
+      table, td, th { border: 1px solid black; }
+</style>
+<table>
+      <tr>
+        <th>Product</th>
+        <th>Alter Preis</th>
+        <th>Neuer Preis</th>
+        <th>Upload Datum</th>
+      </tr>
+    <tr>
+
+    {%for Product in s%}
+        <tr>
+            <td>
+                <a href="{{ Product.get_absolute_url }}">{{ Product.Product }}
+                </a>
+            </td>
+            <td>
+                <a href="{{ Product.get_absolute_url }}">{{ Product.Alter_Preis }}
+                </a>
+            </td>
+
+            <td>
+                <a href="{{ Product.get_absolute_url }}">{{ Product.Neuer_Preis }}
+                </a>
+            </td>
+            <td>
+                <a href="{{ Product.get_absolute_url }}">{{ Product.datumzeit }}
+                </a>
+            </td>
+        </tr>
+    {%endfor%}
+        </tr>
+    </table>
+
 <a href="/polls/">zurück</a>
 </div>
 
