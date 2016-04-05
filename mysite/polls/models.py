@@ -15,7 +15,6 @@ class Product(models.Model):
     Product = models.ForeignKey(
         'Product_id',
         on_delete=models.CASCADE,
-        related_name= 'Preise',
     )
     Neuer_Preis = models.DecimalField(decimal_places=2,max_digits=10)
     Alter_Preis = models.DecimalField(decimal_places=2,max_digits=10)
