@@ -11,23 +11,30 @@ from django.db import models
 from django.utils import timezone
 
 
-class Product(models.Model):
+class Preis(models.Model):
     Product = models.ForeignKey(
-        'Product_id',
+        'Product',
         on_delete=models.CASCADE,
     )
     Neuer_Preis = models.DecimalField(decimal_places=2,max_digits=10)
     Alter_Preis = models.DecimalField(decimal_places=2,max_digits=10)
-    datumzeit = models.DateTimeField(null = True, blank = True)
+    datumzeit = models.DateTimeField(null=True, blank=True)
+
 
     def __str__(self):
         return str(self.Product)
 
 
-class Product_id(models.Model):
-    Product = models.CharField(max_length=200)
+class  Product(models.Model):
+    Kategorie_Choices = (
+        ('Blu-Ray', 'Blu-Ray'),
+        ('Geschirr', 'Geschirr'),
+        ('DVD', 'DVD')
+    )
+    Product = models.CharField(max_length=1000)
     GuenstigsterPreis = models.DecimalField(decimal_places=2,max_digits=10,default=0.0)
     AktuellerPreis = models.DecimalField(decimal_places=2,max_digits=10,default=0.0)
+    Kategorie = models.CharField(max_length=400, choices=Kategorie_Choices)
     def get_absolute_url(self):
         from polls.urls import app_name
         return reverse('%s:product'%(app_name), args=[self.pk])
@@ -37,13 +44,13 @@ class Product_id(models.Model):
 
     def updateGuenstigsterPreis(self):
 
-        for i in Product.objects.filter(Product=self):
+        for i in Preis.objects.filter(Product=self):
             f = []
             f.append(i.Neuer_Preis)
         self.GuenstigsterPreis = min(f)
         self.save()
 
-        AktuellesProdukt = Product.objects.filter(Product_id=self).extra(order_by=['-datumzeit']).first()
+        AktuellesProdukt = Preis.objects.filter(Product=self).extra(order_by=['-datumzeit']).first()
         self.AktuellerPreis = AktuellesProdukt.Neuer_Preis
         self.save()
 

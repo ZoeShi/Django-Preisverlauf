@@ -1,17 +1,20 @@
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/dygraph/1.1.1/dygraph-combined.js"></script>
 
-<h1>{{ Product.Product }}</h1>
+
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
 <form action="{{ Product.get_absolute_url }}" method="post">
     {% csrf_token %}
-    {{ form }}
-
-
+    <p>{{s.0}}</p>
+    <p>{{p.GuenstigsterPreis}}€</p>
+    <p>{{form}}</p>
+    <input type="submit" value="Speichern">
+</form>
 
 </form>
+
 
 <div id="graphdiv"></div>
 
@@ -37,31 +40,39 @@
 </style>
 <table>
       <tr>
+        <th>Nr.</th>
         <th>Product</th>
         <th>Alter Preis</th>
         <th>Neuer Preis</th>
         <th>Upload Datum</th>
+        <th>Kategorie</th>
+
+
+
       </tr>
     <tr>
 
-    {%for Product in s%}
+    {%for Preis in s%}
         <tr>
             <td>
-                <a href="{{ Product.get_absolute_url }}">{{ Product.Product }}
-                </a>
+                <p>
+                    {{ forloop.counter0 }}</p>
             </td>
             <td>
-                <a href="{{ Product.get_absolute_url }}">{{ Product.Alter_Preis }}
-                </a>
+                <p>{{ Preis.Product }}</p>
+            </td>
+            <td>
+                <p>{{ Preis.Alter_Preis }}</p>
             </td>
 
             <td>
-                <a href="{{ Product.get_absolute_url }}">{{ Product.Neuer_Preis }}
-                </a>
+                <p>{{ Preis.Neuer_Preis }}</p>
             </td>
             <td>
-                <a href="{{ Product.get_absolute_url }}">{{ Product.datumzeit }}
-                </a>
+                <p>{{ Preis.datumzeit }}</p>
+            </td>
+            <td>
+                {{ p.Kategorie}}
             </td>
         </tr>
     {%endfor%}
@@ -71,3 +82,8 @@
 <a href="/polls/">zurück</a>
 </div>
 
+
+{% load staticfiles %}
+
+
+<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}" />

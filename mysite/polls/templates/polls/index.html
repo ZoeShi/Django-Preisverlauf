@@ -1,9 +1,9 @@
 <form action="/polls/dateiimport"  method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ form }}
+
     <input type="submit" value="Submit" />
 </form>
-    <h1>Producte</h1>
+    <h1>Produkte</h1>
 <style>
       table, td, th { border: 1px solid black; }
 </style>
@@ -12,30 +12,29 @@
     <button id="search_submit" type="submit" >Submit</button>
 </form>
 
-{% if latest_Product_list %}
+{% if latest_Preis_list %}
     <table>
       <tr>
         <th>Product</th>
         <th>Bester Preis</th>
         <th>Aktueller Preis</th>
+        <th>Kategorie</th>
       </tr>
     <tr>
 
-        {%for Product in latest_Product_list%}
+        {%for Product in latest_Preis_list%}
         <tr>
             <td>
-                <a href="{{ Product.get_absolute_url }}">{{ Product.Product }}
-                </a>
+                <a href="{{ Product.get_absolute_url }}">{{ Product.Product }}</a>
             </td>
             <td>
-                <a href="{{ Product.get_absolute_url }}">{{ Product.GuenstigsterPreis }}
-                </a>
+                <p>{{ Product.GuenstigsterPreis }}</p>
             </td>
 
             <td>
-                <a href="{{ Product.get_absolute_url }}">{{ Product.AktuellerPreis }}
-                </a>
+                <p>{{ Product.AktuellerPreis }}</p>
             </td>
+
         </tr>
         {%endfor%}
 

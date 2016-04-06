@@ -1,10 +1,10 @@
 from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, request
 from django.core.urlresolvers import reverse
 from django.views import generic
 from django.utils import timezone
 from django.shortcuts import render_to_response
-from .forms import UploadFileForm, Product_idForm
+from .forms import UploadFileForm, ProductForm, Auswahlbox
 from decimal import *
 from polls.models import *
 from datetime import datetime
@@ -22,14 +22,14 @@ class UploadView(generic.View):
         if form.is_valid():
             #datei(request.FILES['file'])
             for i in datei(request.FILES['file']):
-                existing = Product_id.objects.filter(Product=i["Product"])
+                existing = Product.objects.filter(Product=i["Preis"])
                 if len(existing) == 0:
-                    k = Product_id()
-                    k.Product = i["Product"]
+                    k = Product()
+                    k.Product = i["Preis"]
                     k.save()
                 else:
                     k = existing[0]
-                x = Product()
+                x = Preis()
                 x.Product = k
                 x.Alter_Preis = i["Alter Preis"]
                 x.Neuer_Preis = i["Neuer Preis"]
@@ -54,13 +54,13 @@ def datei(datei):
     for i in zeilen:
         l = re.findall(r'(.*) hat sich von EUR ([0-9]+\,[0-9]+) auf EUR ([0-9]+\,[0-9]+) .*', i)
 
-        Product=l[0][0]
+        Preis=l[0][0]
         Alter_Preis=l[0][1].replace(",", ".")
         Neuer_Preis=l[0][2].replace(",", ".")
 
 
         o = {
-       	    "Product": Product,
+       	    "Preis": Preis,
             "Alter Preis": Decimal(Alter_Preis),
             "Neuer Preis": Decimal(Neuer_Preis)
         }
@@ -72,55 +72,71 @@ def datei(datei):
 
 class IndexView(generic.View):
     def get_queryset(self):
-        return Product_id.objects.all().order_by('Product')
+        return Product.objects.all().order_by('Product')
 
     def get(self,request):
-        latest_Product_list = self.get_queryset()
-        form = Product_idForm()
+        latest_Preis_list = self.get_queryset()
+        form = ProductForm()
         context = {
-            'latest_Product_list': latest_Product_list,
+            'latest_Preis_list': latest_Preis_list,
             'form': form
         }
 
+
         return render(request, 'polls/index.html', context)
+class save2():
+    def get(self, request):
+        if request.method == "GET":
+            req = request.GET['Kategorie']
+        return render(request, 'polls/index.html')
 
 
-class ProductView(generic.View):
+
+class PreisView(generic.View):
     def get_queryset(self,pk):
-        return Product_id.objects.filter(pk=pk)
-    model = Product
+        return Product.objects.filter(pk=pk)
+    model = Preis
     template_name = 'polls/product.html'
 
     def get(self, request, pk):
-        p = Product_id.objects.get(pk=pk)
-        s = Product.objects.filter(Product=pk)
+        try:
+            req = request.GET["Kategorie"]
+            return save.button
+        except:
+            pass
+        p = Product.objects.get(pk=pk)
+        s = Preis.objects.filter(Product=pk)
 
-        latest_Product_list = self.get_queryset(pk=pk)
+        latest_Preis_list = self.get_queryset(pk=pk)
 
-        form = Product_idForm(instance=p)
+        form = ProductForm(instance=p)
+        form = Auswahlbox()
+
+
 
 
         context = {
-            'latest_Product_list': latest_Product_list,
+            'latest_Preis_list': latest_Preis_list,
             's': s,
             'form': form,
+            'p': p,
         }
         return render(request, 'polls/product.html', context)
 
 
 
 
-class ProductCSVView(generic.View):
+class PreisCSVView(generic.View):
     def get(self, request, pk):
 
-        p = Product_id.objects.get(pk=pk)
+        p = Product.objects.get(pk=pk)
 
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="somefilename.csv"'
 
         writer = csv.writer(response)
         writer.writerow(['Zeit', 'Preis'])
-        all_product_prices = Product.objects.filter(Product=p).extra(order_by=['datumzeit'])
+        all_Preis_prices = Preis.objects.filter(Product=p).extra(order_by=['datumzeit'])
 
         count = 0
         checker_neu = None
@@ -129,7 +145,7 @@ class ProductCSVView(generic.View):
 
 
 
-        for prc in all_product_prices:
+        for prc in all_Preis_prices:
             if checker_neu is not None and checker_alt is not None:
                 if prc.Alter_Preis == prc.Neuer_Preis:
                     writer.writerow([count, str(prc.Alter_Preis)])
@@ -181,10 +197,10 @@ class search(generic.View):
 
     def get(self,request):
         search_query = request.GET.get('search_box', None)
-        gesuchtesproduct = Product_id.objects.filter(Product__contains=search_query)
+        gesuchtesproduct = Preis.objects.filter(Product__contains=search_query)
         form = UploadFileForm()
         context = {
-            'latest_Product_list': gesuchtesproduct,
+            'latest_Preis_list': gesuchtesproduct,
             'form': form
         }
         return render(request, 'polls/index.html', context)
