@@ -84,21 +84,25 @@ class IndexView(generic.View):
 
 
         return render(request, 'polls/index.html', context)
-class save():
-    def get(self, request):
-        if request.method == "GET":
-            form = Auswahlbox(request.POST)
-            if form.is_valid():
-                f = Auswahlbox(request.POST)
-                f.save
-                context = {
-                    'form': form,
-                }
+class saveView(generic.View):
+    def get_queryset(self, pk):
+        return Product.objects.filter(pk=pk)
+
+
+    model = Product
+    template_name = 'polls/product.html'
+
+    def get(self, request, pk):
+        h = Product.objects.filter(pk=pk)
+        return Product.objects.filter(h[0].Kategorie)
 
 
 
 
-        return render(request, 'polls/product.html', {'form': form}, context)
+
+
+        #return render(request, 'polls/product.html', {'form': form}, context)
+
 
 
 
