@@ -4,3 +4,4 @@ __pycache__
 admin
 *.sqlite3
 *.pyc
+.idea/
