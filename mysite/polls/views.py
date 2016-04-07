@@ -84,11 +84,11 @@ class IndexView(generic.View):
 
 
         return render(request, 'polls/index.html', context)
-class save2():
+class save():
     def get(self, request):
         if request.method == "GET":
-            req = request.GET['Kategorie']
-        return render(request, 'polls/index.html')
+            form = Auswahlbox(request.POST)
+        return render(request, 'polls/index.html', {'form': form})
 
 
 
@@ -99,11 +99,7 @@ class PreisView(generic.View):
     template_name = 'polls/product.html'
 
     def get(self, request, pk):
-        try:
-            req = request.GET["Kategorie"]
-            return save.button
-        except:
-            pass
+
         p = Product.objects.get(pk=pk)
         s = Preis.objects.filter(Product=pk)
 
