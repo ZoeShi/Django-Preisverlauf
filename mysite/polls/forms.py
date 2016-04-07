@@ -22,11 +22,4 @@ class Auswahlbox(forms.ModelForm):
 
 
 
-'''class Button(forms.ModelForm):
-    class Meta:
-        if Button :'''
-
-
-
-
 
