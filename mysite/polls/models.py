@@ -25,7 +25,7 @@ class Preis(models.Model):
         return str(self.Product)
 
 
-class  Product(models.Model):
+class Product(models.Model):
     Kategorie_Choices = (
         ('Blu-Ray', 'Blu-Ray'),
         ('Geschirr', 'Geschirr'),
@@ -53,8 +53,6 @@ class  Product(models.Model):
         AktuellesProdukt = Preis.objects.filter(Product=self).extra(order_by=['-datumzeit']).first()
         self.AktuellerPreis = AktuellesProdukt.Neuer_Preis
         self.save()
-
-
 
 
 
