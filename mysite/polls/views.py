@@ -88,7 +88,17 @@ class save():
     def get(self, request):
         if request.method == "GET":
             form = Auswahlbox(request.POST)
-        return render(request, 'polls/index.html', {'form': form})
+            if form.is_valid():
+                f = Auswahlbox(request.POST)
+                f.save
+                context = {
+                    'form': form,
+                }
+
+
+
+
+        return render(request, 'polls/product.html', {'form': form}, context)
 
 
 
