@@ -8,6 +8,7 @@ from .forms import UploadFileForm, ProductForm, Auswahlbox
 from decimal import *
 from polls.models import *
 from datetime import datetime
+from django.views.generic import View
 
 import re
 import csv
@@ -90,12 +91,40 @@ class saveView(generic.View):
 
 
     model = Product
-    template_name = 'polls/product.html'
+    template_name = 'polls/post.html'
 
     def get(self, request, pk):
         h = Product.objects.filter(pk=pk)
         return Product.objects.filter(h[0].Kategorie)
 
+class AuswahlboxView(View):
+    form_class = Auswahlbox
+    initial = {'key': 'value'}
+    template_name = 'polls/post.html'
+
+
+    def get(self, request, *args, **kwargs):
+        print('get methode')
+        form = self.form_class(initial=self.initial)
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, pk, *args, **kwargs):
+        print('post methode')
+        form = self.form_class(request.POST)
+        if request.method == "POST":
+            form = self.form_class(request.POST)
+            if form.is_valid():
+                form.cleaned_data
+                h = Product.objects.filter(pk=pk)
+                h = h[0]
+                h.Kategorie = form.cleaned_data["Kategorie"]
+                h.save()
+
+            return render(request, 'polls/product.html', {'form': form})
+        else:
+            form = Auswahlbox(initial={'key': 'value'})
+
+        return render(request, self.template_name, {'form': form})
 
 
 
