@@ -5,7 +5,7 @@
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
-<form action="{{ Product.get_absolute_url }}" method="post">
+<form action="./post" method="post">
     {% csrf_token %}
     <p>{{s.0}}</p>
     <p>{{p.GuenstigsterPreis}}€</p>

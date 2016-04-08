@@ -120,7 +120,10 @@ class AuswahlboxView(View):
                 h.Kategorie = form.cleaned_data["Kategorie"]
                 h.save()
 
-            return render(request, 'polls/product.html', {'form': form})
+
+
+
+                return HttpResponseRedirect('/polls/post.html/')
         else:
             form = Auswahlbox(initial={'key': 'value'})
 
