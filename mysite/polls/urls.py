@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^$', views.IndexView.as_view(), name='index'),
     url(r'^(?P<pk>[0-9]+)/product/$', views.PreisView.as_view(), name='product'),
     url(r'^(?P<pk>[0-9]+)/product/csv$', views.PreisCSVView.as_view(), name='csv'),
+    url(r'^(?P<pk>[0-9]+)/post/$', views.AuswahlboxView.as_view(), name='post'),
     url(r'dateiimport$', views.UploadView.as_view(), name='upload'),
     url(r'^search/$', views.search.as_view(), name='search'),
 
